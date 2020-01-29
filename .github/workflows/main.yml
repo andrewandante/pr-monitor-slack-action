@@ -1,0 +1,15 @@
+#@TODO change this to a cron
+on: [push]
+
+jobs:
+  pr-monitor-job:
+    runs-on: ubuntu-latest
+    name: PR monitor
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Scan for PRs
+        id: scan
+        uses: actions/pr-monitor-slack-action@v0.1
+        with:
+          channel: '#purr-test'
