@@ -10,6 +10,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Scan for PRs
         id: scan
-        uses: actions/pr-monitor-slack-action@v0.1
+        uses: ./
         with:
           channel: '#purr-test'
