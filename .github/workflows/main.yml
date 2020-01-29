@@ -13,3 +13,4 @@ jobs:
         uses: ./
         with:
           channel: '#purr-test'
+          slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}

@@ -5,6 +5,9 @@ inputs:
     description: 'Channel to send to'
     required: true
     default: '#pr-monitor'
+  slack-token:
+    description: 'Oauth token to enable slack send'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
