@@ -39,13 +39,13 @@ try {
             reviews.forEach(review => {
                 switch (review.state) {
                     case 'APPROVED':
-                        reviewStatus.concat(':heavy_tick:');
+                        reviewStatus = reviewStatus.concat(':heavy_tick:');
                         break;
                     case 'PENDING':
-                        reviewStatus.concat(':heavy_minus_symbol:');
+                        reviewStatus = reviewStatus.concat(':heavy_minus_symbol:');
                         break;
                     case 'CHANGES_REQUESTED':
-                        reviewStatus.concat(':x:');
+                        reviewStatus = reviewStatus.concat(':x:');
                         break;
                     default:
                         // noop
