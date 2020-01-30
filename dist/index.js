@@ -9934,23 +9934,15 @@ try {
             direction: "desc"
         });
         openPullRequests.forEach(pullRequest => {
-            let messageString = `> <${pullRequest.url}|${pullRequest.number}> ${pullRequest.title} - ${pullRequest.user.login}, ${pullRequest.updated_at}`;
+            let messageString = `> <${pullRequest._links.html.href}/files|#${pullRequest.number}> ${pullRequest.title} - ${pullRequest.user.login}, ${pullRequest.updated_at}`;
             console.log(messageString);
             slackMessageParts.push(messageString);
         });
 
         const prPayload = JSON.stringify(openPullRequests, undefined, 2);
         console.log(`The PR payload: ${prPayload}`);
-    })();
 
-    // {
-    //     "text": "*I am a test message*\n > <http://url|url> things are _cool_"
-    // }
-
-
-    const slack = new _slack_web_api__WEBPACK_IMPORTED_MODULE_2__.WebClient(oAuthToken);
-    (async () => {
-
+        const slack = new _slack_web_api__WEBPACK_IMPORTED_MODULE_2__.WebClient(oAuthToken);
         // Post a message to the channel, and await the result.
         // Find more arguments and details of the response: https://api.slack.com/methods/chat.postMessage
         const result = await slack.chat.postMessage({
