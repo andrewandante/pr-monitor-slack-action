@@ -1,0 +1,32 @@
+{
+  "name": "pr-monitor-slack-action",
+  "version": "0.1.0",
+  "description": "Monitors a repo for open PRs and sends a Slack message with details",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "ncc build index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewandante/pr-monitor-slack-action.git"
+  },
+  "keywords": [
+    "slack",
+    "github",
+    "pullrequest",
+    "pr"
+  ],
+  "author": "Andrew Aitken-Fincham",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrewandante/pr-monitor-slack-action/issues"
+  },
+  "homepage": "https://github.com/andrewandante/pr-monitor-slack-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.2",
+    "@actions/github": "^2.1.0",
+    "@slack/web-api": "^5.7.0",
+    "moment": "^2.24.0"
+  }
+}

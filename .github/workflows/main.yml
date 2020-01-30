@@ -1,0 +1,17 @@
+#@TODO change this to a cron
+on: [push]
+
+jobs:
+  pr-monitor-job:
+    runs-on: ubuntu-latest
+    name: PR monitor
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Scan for PRs
+        id: scan
+        uses: ./
+        with:
+          channel: '#purr-test'
+          slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
