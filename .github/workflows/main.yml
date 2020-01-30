@@ -14,3 +14,4 @@ jobs:
         with:
           channel: '#purr-test'
           slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}

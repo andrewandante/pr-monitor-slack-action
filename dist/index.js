@@ -9906,13 +9906,15 @@ try {
     // `who-to-greet` input defined in action metadata file
     const channel = core.getInput('channel');
     const oAuthToken = core.getInput('slack-token');
+    const githubToken = core.getInput('github-token');
+
     console.log(`You chose the channel ${channel}!`);
     const repo = github.context.repo;
+    const octokit = new github.GitHub(githubToken);
 
     (async () => {
-        const openPullRequests = await github.GitHub.pulls.list({
-            owner: repo.owner,
-            repo: repo.repo,
+        const { data: openPullRequests } = await octokit.pulls.list({
+            ...repo,
             state: "open",
             per_page: 100,
             sort: "updated",
