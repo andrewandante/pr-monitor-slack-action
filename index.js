@@ -51,7 +51,7 @@ try {
                 }
             });
 
-            if (!!reviewStatus) {
+            if (reviewStatus === '') {
                 reviewStatus = '-';
             }
 
