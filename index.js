@@ -36,7 +36,7 @@ try {
         // Post a message to the channel, and await the result.
         // Find more arguments and details of the response: https://api.slack.com/methods/chat.postMessage
         const result = await slack.chat.postMessage({
-            text: slackMessageParts.join('\\n'),
+            text: slackMessageParts.join(`\n`),
             channel: channel,
         });
 
