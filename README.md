@@ -1,5 +1,7 @@
 # Pull Request Monitor + Slack Github Action
 
+Screenshot goes here
+
 ## What is this? Why is it useful?
 
 It checks your repo for open pull requests, then sends a message to your designated
