@@ -11,7 +11,7 @@ try {
     const repo = github.context.repo;
     const octokit = new github.GitHub(githubToken);
 
-    const slackMessageParts = [
+    let slackMessageParts = [
         `*${repo.owner}/${repo.repo}*`,
     ];
 
@@ -23,8 +23,8 @@ try {
             sort: "updated",
             direction: "desc"
         });
-        openPullRequests.forEach(function (pullRequest) {
-            slackMessageParts.push(`> <${pullRequest.url}|${pullRequest.number}> ${pullRequest.title} - ${pullRequest.user.id}, ${pullRequest.updated_at}`)
+        openPullRequests.forEach(pullRequest => {
+            slackMessageParts.push(`> <${pullRequest.url}|${pullRequest.number}> ${pullRequest.title} - ${pullRequest.user.login}, ${pullRequest.updated_at}`);
         });
 
         const prPayload = JSON.stringify(openPullRequests, undefined, 2);
