@@ -1,8 +1,6 @@
-import {context} from "@actions/github";
-
-const core = import('@actions/core');
-const github = import('@actions/github');
-const { WebClient } = import('@slack/web-api');
+const core = require('@actions/core');
+const github = require('@actions/github');
+const { WebClient } = require('@slack/web-api');
 
 try {
     // `who-to-greet` input defined in action metadata file
