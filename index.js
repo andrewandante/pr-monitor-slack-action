@@ -26,19 +26,36 @@ try {
         });
 
         openPullRequests.forEach(pullRequest => {
-            const { updated_at, _links, number, title, user } = pullRequest;
+            const { updated_at, _links, pull_number, title, user } = pullRequest;
+            let reviewStatus = '';
+            const { data: reviews } = octokit.pulls.listReviews({
+                ...repo,
+                pull_number
+            });
+
+            reviews.forEach(review => {
+                switch (review.state) {
+                    case 'APPROVED':
+                        reviewStatus.concat(':heavy_tick:');
+                        break;
+                    case 'PENDING':
+                        reviewStatus.concat(':heavy_minus_symbol:');
+                        break;
+                    case 'CHANGES_REQUESTED':
+                        reviewStatus.concat(':x:');
+                        break;
+                    default:
+                        reviewStatus.concat(':grey_question:');
+                        break;
+                }
+            });
+
             const updatedAgo = moment(updated_at).fromNow();
-            let messageString = `> <${_links.html.href}/files|#${number}> ${title} - _${user.login}_, ${updatedAgo}`;
-            console.log(messageString);
+            let messageString = `> <${_links.html.href}/files|#${pull_number}> ${title} ${reviewStatus} _${user.login}_, last updated ${updatedAgo}`;
             slackMessageParts.push(messageString);
         });
 
-        const prPayload = JSON.stringify(openPullRequests, undefined, 2);
-        console.log(`The PR payload: ${prPayload}`);
-
         const slack = new WebClient(oAuthToken);
-        // Post a message to the channel, and await the result.
-        // Find more arguments and details of the response: https://api.slack.com/methods/chat.postMessage
         const result = await slack.chat.postMessage({
             text: slackMessageParts.join(`\n`),
             channel: channel,
