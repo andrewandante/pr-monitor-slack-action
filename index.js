@@ -25,10 +25,10 @@ try {
             direction: "desc"
         });
 
-        openPullRequests.forEach(pullRequest => {
+        for (const pullRequest of openPullRequests) {
             const { updated_at, _links, pull_number, title, user } = pullRequest;
             let reviewStatus = '';
-            const { data: reviews } = octokit.pulls.listReviews({
+            const { data: reviews } = await octokit.pulls.listReviews({
                 ...repo,
                 pull_number
             });
@@ -53,7 +53,7 @@ try {
             const updatedAgo = moment(updated_at).fromNow();
             let messageString = `> <${_links.html.href}/files|#${pull_number}> ${title} ${reviewStatus} _${user.login}_, last updated ${updatedAgo}`;
             slackMessageParts.push(messageString);
-        });
+        }
 
         const slack = new WebClient(oAuthToken);
         const result = await slack.chat.postMessage({
