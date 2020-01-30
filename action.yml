@@ -16,6 +16,22 @@ inputs:
     description: 'Direction for sort'
     required: true
     default: 'desc'
+  approved-emoji:
+    description: 'Slack emoji to use for an approved review'
+    required: true
+    default: 'heavy_check_mark'
+  pending-emoji:
+    description: 'Slack emoji to use for a pending review'
+    required: true
+    default: 'heavy_minus_symbol'
+  changes-requested-emoji:
+    description: 'Slack emoji to use for a review that requests changes'
+    required: true
+    default: 'x'
+  requested-reviewer-emoji:
+    description: 'Slack emoji to use for a review that is requested but not actioned'
+    required: true
+    default: 'heavy_minus_symbol'
 runs:
   using: 'node12'
   main: 'dist/index.js'

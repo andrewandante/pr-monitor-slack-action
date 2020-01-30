@@ -9917,13 +9917,8 @@ __webpack_require__.r(__webpack_exports__);
 
 try {
     const channel = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('channel');
-    const oAuthToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slack-token');
-    const githubToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github-token');
-    const sort = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('sort');
-    const sortDirection = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('sort-direction');
-
     const repo = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo;
-    const octokit = new _actions_github__WEBPACK_IMPORTED_MODULE_1__.GitHub(githubToken);
+    const octokit = new _actions_github__WEBPACK_IMPORTED_MODULE_1__.GitHub(_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github-token'));
 
     let slackMessageParts = [
         `*${repo.owner}/${repo.repo}*`,
@@ -9934,61 +9929,66 @@ try {
             ...repo,
             state: "open",
             per_page: 100,
-            sort,
-            direction: sortDirection
+            sort: _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('sort'),
+            direction: _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('sort-direction')
         });
 
-        for (const pullRequest of openPullRequests) {
-            const { updated_at, _links, number, title, user } = pullRequest;
-            let reviewStatuses = [];
-            let reviewStatus = '-';
-            const { data: reviews } = await octokit.pulls.listReviews({
-                ...repo,
-                pull_number: number
-            });
+        if (openPullRequests.length === 0) {
+            slackMessageParts.push('> No open pull requests found!');
+        } else {
 
-            // loop over all the reviews, overwriting if a reviewer has submitted more than one
-            // This means their most recent review is reflected
-            reviews.forEach(review => {
-                switch (review.state) {
-                    case 'APPROVED':
-                        reviewStatuses[review.user.id] = ':heavy_check_mark:';
-                        break;
-                    case 'PENDING':
-                        reviewStatuses[review.user.id] = ':heavy_minus_symbol:';
-                        break;
-                    case 'CHANGES_REQUESTED':
-                        reviewStatuses[review.user.id] = ':x:';
-                        break;
-                    default:
-                        // noop
-                        break;
+            for (const pullRequest of openPullRequests) {
+                const {updated_at, _links, number, title, user} = pullRequest;
+                let reviewStatuses = [];
+                let reviewStatus = '-';
+                const {data: reviews} = await octokit.pulls.listReviews({
+                    ...repo,
+                    pull_number: number
+                });
+
+                // loop over all the reviews, overwriting if a reviewer has submitted more than one
+                // This means their most recent review is reflected
+                reviews.forEach(review => {
+                    switch (review.state) {
+                        case 'APPROVED':
+                            reviewStatuses[review.user.id] = `:${_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('approved-emoji')}:`;
+                            break;
+                        case 'PENDING':
+                            reviewStatuses[review.user.id] = `:${_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pending-emoji')}:`;
+                            break;
+                        case 'CHANGES_REQUESTED':
+                            reviewStatuses[review.user.id] = `:${_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('changes-requested-emoji')}:`;
+                            break;
+                        default:
+                            // noop
+                            break;
+                    }
+                });
+
+                const {data: requestedReviewers} = await octokit.pulls.listReviewRequests({
+                    ...repo,
+                    pull_number: number
+                });
+
+                // Also loop over requested reviewers - we store in the same way to account for the
+                // "re-request review" button
+                requestedReviewers.users.forEach(reviewer => {
+                    reviewStatuses[reviewer.id] = `:${_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('requested-reviewer-emoji')}:`;
+                });
+
+                if (reviewStatuses !== []) {
+                    reviewStatus = Object.keys(reviewStatuses).map(function (key) {
+                        return reviewStatuses[key];
+                    }).join(' ');
                 }
-            });
 
-            const { data: requestedReviewers } = await octokit.pulls.listReviewRequests({
-                ...repo,
-                pull_number: number
-            });
-
-            // Also loop over requested reviewers - we store in the same way to account for the
-            // "re-request review" button
-            requestedReviewers.users.forEach(reviewer => {
-                reviewStatuses[reviewer.id] = ':heavy_minus_symbol:'
-            });
-
-            if (reviewStatuses !== []) {
-                reviewStatus = Object.keys(reviewStatuses).map(function (key) {
-                    return reviewStatuses[key];
-                }).join(' ');
+                const updatedAgo = moment__WEBPACK_IMPORTED_MODULE_3___default()(updated_at).fromNow();
+                let messageString = `> <${_links.html.href}/files|#${number}> *${title}* ${reviewStatus} _${user.login}_, last updated ${updatedAgo}`;
+                slackMessageParts.push(messageString);
             }
-
-            const updatedAgo = moment__WEBPACK_IMPORTED_MODULE_3___default()(updated_at).fromNow();
-            let messageString = `> <${_links.html.href}/files|#${number}> *${title}* ${reviewStatus} _${user.login}_, last updated ${updatedAgo}`;
-            slackMessageParts.push(messageString);
         }
 
-        const slack = new _slack_web_api__WEBPACK_IMPORTED_MODULE_2__.WebClient(oAuthToken);
+        const slack = new _slack_web_api__WEBPACK_IMPORTED_MODULE_2__.WebClient(_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slack-token'));
         const result = await slack.chat.postMessage({
             text: slackMessageParts.join(`\n`),
             channel,
