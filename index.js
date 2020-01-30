@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { WebClient } from '@slack/web-api';
+import moment from "moment";
 
 try {
     const channel = core.getInput('channel');
@@ -23,8 +24,11 @@ try {
             sort: "updated",
             direction: "desc"
         });
+
         openPullRequests.forEach(pullRequest => {
-            let messageString = `> <${pullRequest._links.html.href}/files|#${pullRequest.number}> ${pullRequest.title} - ${pullRequest.user.login}, ${pullRequest.updated_at}`;
+            const { updated_at, _links, number, title, user } = pullRequest;
+            const updatedAgo = moment(updated_at).fromNow();
+            let messageString = `> <${_links.html.href}/files|#${number}> ${title} - _${user.login}_, ${updatedAgo}`;
             console.log(messageString);
             slackMessageParts.push(messageString);
         });
