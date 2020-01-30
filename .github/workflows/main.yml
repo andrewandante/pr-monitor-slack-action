@@ -1,4 +1,4 @@
-#@TODO change this to a cron
+# Used for testing only
 on: [push]
 
 jobs:
@@ -12,6 +12,5 @@ jobs:
         id: scan
         uses: ./
         with:
-          channel: '#purr-test'
           slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
