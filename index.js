@@ -40,7 +40,7 @@ try {
             reviews.forEach(review => {
                 switch (review.state) {
                     case 'APPROVED':
-                        reviewStatuses[review.user.id] = ':heavy_tick:';
+                        reviewStatuses[review.user.id] = ':heavy_check_mark:';
                         break;
                     case 'PENDING':
                         reviewStatuses[review.user.id] = ':heavy_minus_symbol:';
