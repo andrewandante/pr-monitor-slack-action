@@ -3,7 +3,6 @@ import * as github from '@actions/github';
 import { WebClient } from '@slack/web-api';
 
 try {
-    // `who-to-greet` input defined in action metadata file
     const channel = core.getInput('channel');
     const oAuthToken = core.getInput('slack-token');
     const githubToken = core.getInput('github-token');
@@ -11,6 +10,10 @@ try {
     console.log(`You chose the channel ${channel}!`);
     const repo = github.context.repo;
     const octokit = new github.GitHub(githubToken);
+
+    const slackMessageParts = [
+        `*${repo.owner}/${repo.repo}*`,
+    ];
 
     (async () => {
         const { data: openPullRequests } = await octokit.pulls.list({
@@ -20,9 +23,17 @@ try {
             sort: "updated",
             direction: "desc"
         });
+        openPullRequests.forEach(function (pullRequest) {
+            slackMessageParts.push(`> <${pullRequest.url}|${pullRequest.number}> ${pullRequest.title} - ${pullRequest.user.id}, ${pullRequest.updated_at}`)
+        });
+
         const prPayload = JSON.stringify(openPullRequests, undefined, 2);
         console.log(`The PR payload: ${prPayload}`);
     })();
+
+    // {
+    //     "text": "*I am a test message*\n > <http://url|url> things are _cool_"
+    // }
 
 
     const slack = new WebClient(oAuthToken);
@@ -31,12 +42,12 @@ try {
         // Post a message to the channel, and await the result.
         // Find more arguments and details of the response: https://api.slack.com/methods/chat.postMessage
         const result = await slack.chat.postMessage({
-            text: 'Hello? Yes, this is Patrick!',
-            channel: '#purr-test',
+            text: slackMessageParts.join('\\n'),
+            channel: channel,
         });
 
         // The result contains an identifier for the message, `ts`.
-        console.log(`Successfully send message ${result.ts} in conversation #purr-test`);
+        console.log(`Successfully send message ${result.ts} in conversation ${channel}`);
     })();
 } catch (error) {
     core.setFailed(error.message);

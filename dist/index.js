@@ -9913,7 +9913,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 try {
-    // `who-to-greet` input defined in action metadata file
     const channel = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('channel');
     const oAuthToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slack-token');
     const githubToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github-token');
@@ -9921,6 +9920,10 @@ try {
     console.log(`You chose the channel ${channel}!`);
     const repo = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo;
     const octokit = new _actions_github__WEBPACK_IMPORTED_MODULE_1__.GitHub(githubToken);
+
+    const slackMessageParts = [
+        `*${repo.owner}/${repo.repo}*`,
+    ];
 
     (async () => {
         const { data: openPullRequests } = await octokit.pulls.list({
@@ -9930,9 +9933,17 @@ try {
             sort: "updated",
             direction: "desc"
         });
+        openPullRequests.forEach(function (pullRequest) {
+            slackMessageParts.push(`> <${pullRequest.url}|${pullRequest.number}> ${pullRequest.title} - ${pullRequest.user.id}, ${pullRequest.updated_at}`)
+        });
+
         const prPayload = JSON.stringify(openPullRequests, undefined, 2);
         console.log(`The PR payload: ${prPayload}`);
     })();
+
+    // {
+    //     "text": "*I am a test message*\n > <http://url|url> things are _cool_"
+    // }
 
 
     const slack = new _slack_web_api__WEBPACK_IMPORTED_MODULE_2__.WebClient(oAuthToken);
@@ -9941,12 +9952,12 @@ try {
         // Post a message to the channel, and await the result.
         // Find more arguments and details of the response: https://api.slack.com/methods/chat.postMessage
         const result = await slack.chat.postMessage({
-            text: 'Hello? Yes, this is Patrick!',
-            channel: '#purr-test',
+            text: slackMessageParts.join('\\n'),
+            channel: channel,
         });
 
         // The result contains an identifier for the message, `ts`.
-        console.log(`Successfully send message ${result.ts} in conversation #purr-test`);
+        console.log(`Successfully send message ${result.ts} in conversation ${channel}`);
     })();
 } catch (error) {
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
