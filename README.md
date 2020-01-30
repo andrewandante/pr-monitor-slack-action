@@ -52,7 +52,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Scan for PRs
         id: scan
-        uses: @actions/pr-monitor-slack-action
+        uses: andrewandante/pr-monitor-slack-action@v1.0.0
         with:
           # required inputs
           slack-token: ${{ secrets.SLACK_OAUTH_TOKEN }}
