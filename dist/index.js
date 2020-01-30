@@ -9968,7 +9968,7 @@ try {
             }
 
             const updatedAgo = moment__WEBPACK_IMPORTED_MODULE_3___default()(updated_at).fromNow();
-            let messageString = `> <${_links.html.href}/files|#${number}> **${title}** ${reviewStatus} _${user.login}_, last updated ${updatedAgo}`;
+            let messageString = `> <${_links.html.href}/files|#${number}> *${title}* ${reviewStatus} _${user.login}_, last updated ${updatedAgo}`;
             slackMessageParts.push(messageString);
         }
 
