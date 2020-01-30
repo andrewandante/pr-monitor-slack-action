@@ -34,6 +34,8 @@ try {
                 pull_number: number
             });
 
+            //hmm looks like it stores all the reviews
+
             reviews.forEach(review => {
                 switch (review.state) {
                     case 'APPROVED':
