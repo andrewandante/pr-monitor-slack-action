@@ -9978,7 +9978,9 @@ try {
             });
 
             if (reviewStatuses !== []) {
-                reviewStatus = reviewStatuses.values().join(' ');
+                reviewStatus = Object.keys(reviewStatuses).map(function (key) {
+                    return reviewStatuses[key];
+                }).join(' ');
             }
 
             const updatedAgo = moment__WEBPACK_IMPORTED_MODULE_3___default()(updated_at).fromNow();

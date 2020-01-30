@@ -66,7 +66,9 @@ try {
             });
 
             if (reviewStatuses !== []) {
-                reviewStatus = reviewStatuses.values().join(' ');
+                reviewStatus = Object.keys(reviewStatuses).map(function (key) {
+                    return reviewStatuses[key];
+                }).join(' ');
             }
 
             const updatedAgo = moment(updated_at).fromNow();
