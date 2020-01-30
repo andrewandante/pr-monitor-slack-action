@@ -7,8 +7,9 @@ try {
     const channel = core.getInput('channel');
     const oAuthToken = core.getInput('slack-token');
     const githubToken = core.getInput('github-token');
+    const sort = core.getInput('sort');
+    const sortDirection = core.getInput('sort-direction');
 
-    console.log(`You chose the channel ${channel}!`);
     const repo = github.context.repo;
     const octokit = new github.GitHub(githubToken);
 
@@ -21,8 +22,8 @@ try {
             ...repo,
             state: "open",
             per_page: 100,
-            sort: "updated",
-            direction: "desc"
+            sort,
+            direction: sortDirection
         });
 
         for (const pullRequest of openPullRequests) {
@@ -45,20 +46,24 @@ try {
                         reviewStatus.concat(':x:');
                         break;
                     default:
-                        reviewStatus.concat(':grey_question:');
+                        // noop
                         break;
                 }
             });
 
+            if (reviewStatus === '') {
+                reviewStatus = '-';
+            }
+
             const updatedAgo = moment(updated_at).fromNow();
-            let messageString = `> <${_links.html.href}/files|#${number}> ${title} ${reviewStatus} _${user.login}_, last updated ${updatedAgo}`;
+            let messageString = `> <${_links.html.href}/files|#${number}> *${title}* ${reviewStatus} _${user.login}_, last updated ${updatedAgo}`;
             slackMessageParts.push(messageString);
         }
 
         const slack = new WebClient(oAuthToken);
         const result = await slack.chat.postMessage({
             text: slackMessageParts.join(`\n`),
-            channel: channel,
+            channel,
         });
 
         // The result contains an identifier for the message, `ts`.

@@ -8,6 +8,14 @@ inputs:
   slack-token:
     description: 'Oauth token to enable slack send'
     required: true
+  sort:
+    description: 'Field to sort by: can be created, updated, popularity (comment count) or long-running'
+    required: true
+    default: 'updated'
+  sort-direction:
+    description: 'Direction for sort'
+    required: true
+    default: 'desc'
 runs:
   using: 'node12'
   main: 'dist/index.js'
