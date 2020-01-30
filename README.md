@@ -1,7 +1,5 @@
 # Pull Request Monitor + Slack Github Action
 
-![Screenshot](./img/screenshot1.png)
-
 ## What is this? Why is it useful?
 
 It checks your repo for open pull requests, then sends a message to your designated
@@ -30,6 +28,10 @@ these - it will need the following permissions at a minimum:
 Once configured, add the App to your workspace - this will generate an Oauth token
 (same page as above) - you'll need this later. You then need to invite it the
 bot to the channel that you plan to send messages to.
+
+Mine is called Patrick:
+
+![Screenshot](./img/screenshot1.png)
 
 ### Github
 
