@@ -1,6 +1,6 @@
 # Pull Request Monitor + Slack Github Action
 
-Screenshot goes here
+![Screenshot](./img/screenshot1.png)
 
 ## What is this? Why is it useful?
 
@@ -60,9 +60,9 @@ jobs:
           sort: 'updated'
           sort-direction: 'desc'
           approved-emoji: 'heavy_check_mark'
-          pending-emoji: 'heavy_minus_symbol'
+          pending-emoji: 'heavy_minus_sign'
           changes-requested-emoji: 'x'
-          requested-reviewer-emoji: 'heavy_minus_symbol'
+          requested-reviewer-emoji: 'heavy_minus_sign'
 ```
 
 #### Inputs
@@ -99,7 +99,7 @@ The order of the sort. Can also be 'asc'.
 The emoji to use for a pull request review that has approved the changes
 (minus the wrapping colons)
 
-##### pending-emoji [default: 'heavy_minus_symbol']
+##### pending-emoji [default: 'heavy_minus_sign']
 
 The emoji to use for a pull request review that is pending (minus the 
 wrapping colons)
@@ -109,7 +109,12 @@ wrapping colons)
 The emoji to use for a pull request review that has requested changes (minus
 the wrapping colons)
 
-##### requested-reviewer-emoji [default: 'heavy_minus_symbol']
+##### requested-reviewer-emoji [default: 'heavy_minus_sign']
 
 The emoji to use for a pull request review has been requested but not begun
 (minus the wrapping colons)
+
+## Thanks
+
+Shout out to [stojg/purr](https://github.com/stojg/purr), the first iteration of
+this idea that motivated me enough to learn Javascript just to write it.
