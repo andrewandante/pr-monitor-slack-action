@@ -28,24 +28,25 @@ try {
 
         for (const pullRequest of openPullRequests) {
             const { updated_at, _links, number, title, user } = pullRequest;
-            let reviewStatus = '';
+            let reviewStatuses = [];
+            let reviewStatus = '-';
             const { data: reviews } = await octokit.pulls.listReviews({
                 ...repo,
                 pull_number: number
             });
 
-            //hmm looks like it stores all the reviews
-
+            // loop over all the reviews, overwriting if a reviewer has submitted more than one
+            // This means their most recent review is reflected
             reviews.forEach(review => {
                 switch (review.state) {
                     case 'APPROVED':
-                        reviewStatus = reviewStatus.concat(':heavy_tick:');
+                        reviewStatuses[review.user.id] = ':heavy_tick:';
                         break;
                     case 'PENDING':
-                        reviewStatus = reviewStatus.concat(':heavy_minus_symbol:');
+                        reviewStatuses[review.user.id] = ':heavy_minus_symbol:';
                         break;
                     case 'CHANGES_REQUESTED':
-                        reviewStatus = reviewStatus.concat(':x:');
+                        reviewStatuses[review.user.id] = ':x:';
                         break;
                     default:
                         // noop
@@ -53,8 +54,19 @@ try {
                 }
             });
 
-            if (reviewStatus === '') {
-                reviewStatus = '-';
+            const { data: requestedReviewers } = await octokit.pulls.listReviewRequests({
+                ...repo,
+                pull_number: number
+            });
+
+            // Also loop over requested reviewers - we store in the same way to account for the
+            // "re-request review" button
+            requestedReviewers.users.forEach(reviewer => {
+                reviewStatuses[reviewer.id] = ':heavy_minus_symbol:'
+            });
+
+            if (reviewStatuses !== []) {
+                reviewStatus = reviewStatuses.values().join(' ');
             }
 
             const updatedAgo = moment(updated_at).fromNow();
