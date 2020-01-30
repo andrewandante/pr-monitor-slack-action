@@ -9934,7 +9934,9 @@ try {
             direction: "desc"
         });
         openPullRequests.forEach(pullRequest => {
-            slackMessageParts.push(`> <${pullRequest.url}|${pullRequest.number}> ${pullRequest.title} - ${pullRequest.user.login}, ${pullRequest.updated_at}`);
+            let messageString = `> <${pullRequest.url}|${pullRequest.number}> ${pullRequest.title} - ${pullRequest.user.login}, ${pullRequest.updated_at}`;
+            console.log(messageString);
+            slackMessageParts.push(messageString);
         });
 
         const prPayload = JSON.stringify(openPullRequests, undefined, 2);
