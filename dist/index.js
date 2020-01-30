@@ -9914,13 +9914,13 @@ __webpack_require__.r(__webpack_exports__);
 
 try {
     // `who-to-greet` input defined in action metadata file
-    const channel = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('channel');
-    const oAuthToken = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('slack-token');
-    const githubToken = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('github-token');
+    const channel = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('channel');
+    const oAuthToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slack-token');
+    const githubToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github-token');
 
     console.log(`You chose the channel ${channel}!`);
-    const repo = _actions_github__WEBPACK_IMPORTED_MODULE_1___default.a.context.repo;
-    const octokit = new _actions_github__WEBPACK_IMPORTED_MODULE_1___default.a.GitHub(githubToken);
+    const repo = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo;
+    const octokit = new _actions_github__WEBPACK_IMPORTED_MODULE_1__.GitHub(githubToken);
 
     (async () => {
         const { data: openPullRequests } = await octokit.pulls.list({
@@ -9949,7 +9949,7 @@ try {
         console.log(`Successfully send message ${result.ts} in conversation #purr-test`);
     })();
 } catch (error) {
-    _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setFailed(error.message);
+    _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
 }
 
 
