@@ -10,7 +10,7 @@ try {
     const repo = github.context.repo;
 
     (async () => {
-        const openPullRequests = await github.pulls.list({
+        const openPullRequests = await github.GitHub.pulls.list({
             owner: repo.owner,
             repo: repo.repo,
             state: "open",
