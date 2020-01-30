@@ -9919,8 +9919,9 @@ try {
     const channel = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('channel');
     const oAuthToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('slack-token');
     const githubToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github-token');
+    const sort = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('sort');
+    const sortDirection = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('sort-direction');
 
-    console.log(`You chose the channel ${channel}!`);
     const repo = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo;
     const octokit = new _actions_github__WEBPACK_IMPORTED_MODULE_1__.GitHub(githubToken);
 
@@ -9933,8 +9934,8 @@ try {
             ...repo,
             state: "open",
             per_page: 100,
-            sort: "updated",
-            direction: "desc"
+            sort,
+            direction: sortDirection
         });
 
         for (const pullRequest of openPullRequests) {
@@ -9967,14 +9968,14 @@ try {
             }
 
             const updatedAgo = moment__WEBPACK_IMPORTED_MODULE_3___default()(updated_at).fromNow();
-            let messageString = `> <${_links.html.href}/files|#${number}> ${title} ${reviewStatus} _${user.login}_, last updated ${updatedAgo}`;
+            let messageString = `> <${_links.html.href}/files|#${number}> **${title}** ${reviewStatus} _${user.login}_, last updated ${updatedAgo}`;
             slackMessageParts.push(messageString);
         }
 
         const slack = new _slack_web_api__WEBPACK_IMPORTED_MODULE_2__.WebClient(oAuthToken);
         const result = await slack.chat.postMessage({
             text: slackMessageParts.join(`\n`),
-            channel: channel,
+            channel,
         });
 
         // The result contains an identifier for the message, `ts`.
