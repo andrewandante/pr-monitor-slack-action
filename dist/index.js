@@ -9938,11 +9938,11 @@ try {
         });
 
         for (const pullRequest of openPullRequests) {
-            const { updated_at, _links, pull_number, title, user } = pullRequest;
+            const { updated_at, _links, number, title, user } = pullRequest;
             let reviewStatus = '';
             const { data: reviews } = await octokit.pulls.listReviews({
                 ...repo,
-                pull_number
+                pull_number: number
             });
 
             reviews.forEach(review => {
