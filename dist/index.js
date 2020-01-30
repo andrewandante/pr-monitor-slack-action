@@ -36,6 +36,8 @@ module.exports =
 /******/ 		// Load entry module and return exports
 /******/ 		return __webpack_require__(553);
 /******/ 	};
+/******/ 	// initialize runtime
+/******/ 	runtime(__webpack_require__);
 /******/
 /******/ 	// run startup
 /******/ 	return startup();
@@ -9896,21 +9898,29 @@ function descending(a, b)
 /***/ }),
 
 /***/ 553:
-/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
+/***/ (function(__unusedmodule, __webpack_exports__, __webpack_require__) {
 
-const core = __webpack_require__(237);
-const github = __webpack_require__(980);
-const { WebClient } = __webpack_require__(318);
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(237);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(980);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _slack_web_api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(318);
+/* harmony import */ var _slack_web_api__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_slack_web_api__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
 
 try {
     // `who-to-greet` input defined in action metadata file
-    const channel = core.getInput('channel');
-    const oAuthToken = core.getInput('slack-token');
-    const githubToken = core.getInput('github-token');
+    const channel = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('channel');
+    const oAuthToken = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('slack-token');
+    const githubToken = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput('github-token');
 
     console.log(`You chose the channel ${channel}!`);
-    const repo = github.context.repo;
-    const octokit = new github.GitHub(githubToken);
+    const repo = _actions_github__WEBPACK_IMPORTED_MODULE_1___default.a.context.repo;
+    const octokit = new _actions_github__WEBPACK_IMPORTED_MODULE_1___default.a.GitHub(githubToken);
 
     (async () => {
         const { data: openPullRequests } = await octokit.pulls.list({
@@ -9925,7 +9935,7 @@ try {
     })();
 
 
-    const slack = new WebClient(oAuthToken);
+    const slack = new _slack_web_api__WEBPACK_IMPORTED_MODULE_2__.WebClient(oAuthToken);
     (async () => {
 
         // Post a message to the channel, and await the result.
@@ -9939,7 +9949,7 @@ try {
         console.log(`Successfully send message ${result.ts} in conversation #purr-test`);
     })();
 } catch (error) {
-    core.setFailed(error.message);
+    _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setFailed(error.message);
 }
 
 
@@ -31515,4 +31525,43 @@ exports.createTokenAuth = createTokenAuth;
 
 /***/ })
 
-/******/ });
+/******/ },
+/******/ function(__webpack_require__) { // webpackRuntimeModules
+/******/ 	"use strict";
+/******/ 
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function getDefault() { return module['default']; } :
+/******/ 				function getModuleExports() { return module; };
+/******/ 			__webpack_require__.d(getter, 'a', getter);
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getter */
+/******/ 	!function() {
+/******/ 		// define getter function for harmony exports
+/******/ 		var hasOwnProperty = Object.prototype.hasOwnProperty;
+/******/ 		__webpack_require__.d = function(exports, name, getter) {
+/******/ 			if(!hasOwnProperty.call(exports, name)) {
+/******/ 				Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ }
+);
