@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/andrewandante/pr-monitor-slack-action#readme",
   "dependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^1.9.1",
     "@actions/github": "^2.1.0",
     "@slack/web-api": "^5.7.0",
     "moment": "^2.29.4"
